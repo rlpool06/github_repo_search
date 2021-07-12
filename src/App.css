@@ -14,45 +14,44 @@
   padding: 20px;
 }
 
+.list-container{
+  flex-wrap: wrap;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
 .card {
   border: 1px solid black;
   height: 300px;
   margin-top: 180px;
-  width: 180px;
+  width: 300px;
   float: left;
-  background-color: white;
+  background-color: rgba(233, 233, 233, 0.712);
   margin-left: 32px;
-  border-radius: 10px; 
-}
-
-.right-container{
-  margin-left: 100px;
-  padding-left: 190px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  border-radius: 5px; 
 }
 
 .card-body {
+  flex-grow: 4;
+  flex-shrink: 1;
+  flex-basis: calc(var(--modifier) * 999);
   margin-top: 16px;
-  width: 100px;
   padding-right: 20px;
   margin-right: 20px;
   padding-left: 20px;
 }
 
-.card-body > img {
-  position:relative;
-  height: 80px;
-  width: 150px;
-  animation: rotation 2s infinite linear;
+.col {
+  margin: .5em;
+  font-weight: bold;
+  
 }
 
-@keyframes rotation {
-  from {
-  transform: rotate(0deg);
-  }
-  to {
-  transform: rotate(359deg);
-  }
+input {
+  border: none;
+  background: hsl(0 0% 93%);
+  border-radius: .25rem;
+  padding: .75rem 1rem;
+  
 }
