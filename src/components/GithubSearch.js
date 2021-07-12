@@ -8,57 +8,76 @@ class GithubSearch extends Component {
         this.state = {
             username: '',
             repos: [],
+            apiMsg:'',
+            userInfo: {}
         }
     };
 
     handleChange = (e) => {
         this.setState({ username: e.target.value });
+        setTimeout(this.handleSubmit, 1000)
     }
 
-    handleSubmit = () => {
-        fetch(`https://api.github.com/${this.state.username}/repos`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-            });
-        }
+    handleSubmit = (e) => {
+        fetch(`https://api.github.com/users/${this.state.username}/repos`)
+        .then(res => res.json())
+        .then(data => {
+            console.log('data',data)
+            this.setState({repo:data})
+            this.setState({ username: e.target.value })
+        })
+        .catch(err => {
+            this.setState({
+                repos: [],
+                apiMsg: err.message
+            })
+        })
+    }
 
     render() {
+        console.log(this.state.repo)
         const {
             username,
             repos,
+            apiMsg,
+            userInfo: {
+                avatar_url,
+                login,
+                html_url
+            }
         } = this.state
 
         return (
+            
             <Fragment>
                 <div className='header'>Github Search</div>
-                <form onSubmit={this.handleChange} className='search'>
+                <form className='search'>
                     <input 
                         placeholder='Github user'
                         name='github user' 
                         type='text' 
-                        onChange={this.handleSubmit}
+                        onChange={this.handleChange}
                         value={username}
                     />
-                    <button type='submit'>Search</button>
+                    <button onClick={this.handleSubmit} >Search</button>
                 </form>
+                <p>{apiMsg}</p>
 
-                {
-                    <Fragment>
-                        <div className='right-container'>
-                            {repos.map ((repo) => {
-                                return (
-                                    <ListComponent 
-                                        name={repo.name}
-                                        description={repo.description}
-                                        language={repo.language}
-                                    />)
-                                })};
-                        </div>
-                    </Fragment>
-                }
-
+        {
+            repos.length > 0 &&
+                <Fragment>
+                    <div className='user-info'>
+                        <img className='img-responsive center-block' src={avatar_url} alt='avatar'/>
+                        <h3>{login}</h3>
+                        <h4><a href={html_url} target='_blank' rel="noreferrer">{html_url}</a></h4>
+                    </div>
+                    <div className='right-container'>
+                        {this.state.repos.map(repo => <ListComponent key={repo.id} {...repo}/>)}
+                    </div>
+                </Fragment>
+        }
             </Fragment>
+            
         )
     }
 }
