@@ -1,3 +1,7 @@
+# Project Description
+
+This project is a Github search application.  Type in a Github username to display their most starred repositories, not including forked repos.  To start the app, fork the repo into your code editor then run 'yarn start' to run in your browser.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
