@@ -19,11 +19,7 @@ class GithubSearch extends Component {
 
     handleSubmit = (e) => {
         this.setState({loading:true})
-        fetch(`https://api.github.com/users/${this.state.username}/repos?per_page=100`, {
-            headers: {
-                'Authorization': 'token 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'
-            },
-        })
+        fetch(`https://api.github.com/users/${this.state.username}/repos?per_page=100`)
         .then(res => res.json())
         .then(data => {
             this.setState({
