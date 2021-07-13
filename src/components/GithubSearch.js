@@ -29,14 +29,16 @@ class GithubSearch extends Component {
             this.setState({
                 loading: false
             })
-            if (data.length) {
+            if (!data.length) {
+                this.setState({
+                    apiMsg: 'This user has no repos.'
+                })
+                
+            } else {
                 this.setState({
                     repos: data, 
                     username: e.target.value,
-                })
-            } else {
-                this.setState({
-                    apiMsg: 'This user has no repos.'
+                    apiMsg:null
                 })
             }
             console.log('data',data)
