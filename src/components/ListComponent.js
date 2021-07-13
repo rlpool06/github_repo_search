@@ -10,10 +10,17 @@ const ListComponent = ({ name, description, language, html_url }) => {
                 </div>
                 <hr/>
                 <div>
-                    <p>Description: {description}</p>
+                    <p>Description: {
+                        description
+                        ? <span> { description }</span>
+                        : <span className='unknown'> None </span>
+                    }</p>
                 </div>
                 <div>
-                    <p>Languages: {language}</p>
+                    <p>Languages: {
+                        language ? <span className='exists'> { language }</span>
+                        : <span className='unknown'> Unknown </span>
+                    }</p>
                 </div>
             </div>
         </div>

@@ -8,7 +8,8 @@ class GithubSearch extends Component {
         this.state = {
             username: '',
             repos: [],
-            userInfo: {}
+            apiMsg: '',
+            loading: false
         }
     };
 
@@ -17,31 +18,51 @@ class GithubSearch extends Component {
     }
 
     handleSubmit = (e) => {
-        fetch(`https://api.github.com/users/${this.state.username}/repos`, {
+        this.setState({loading:true})
+        fetch(`https://api.github.com/users/${this.state.username}/repos?per_page=100`, {
             headers: {
                 'Authorization': 'token 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'
             },
         })
         .then(res => res.json())
         .then(data => {
+            this.setState({
+                loading: false
+            })
+            if (data.length) {
+                this.setState({
+                    repos: data, 
+                    username: e.target.value,
+                })
+            } else {
+                this.setState({
+                    apiMsg: 'This user has no repos.'
+                })
+            }
             console.log('data',data)
-            this.setState({repos:data})
-            this.setState({ username: e.target.value })
         })
         .catch(err => {
             this.setState({
                 repos: [],
-                apiMsg: err.message
+                apiMsg: 'your request is invalid',
+                loading: false
             })
         })
     }
 
     render() {
-        console.log('render', this.state.repos)
         const {
             username,
             repos,
+            loading,
+            apiMsg
         } = this.state
+
+        // const noForks = repos.map(repo => !repo.fork && repo)
+        // console.log('noForks', noForks)
+
+        const starCount = repos.sort((a, b) => (a.stargazers_count < b.stargazers_count) ? 1 : -1)
+        // console.log('starCount',starCount)
 
         return (
             
@@ -57,14 +78,15 @@ class GithubSearch extends Component {
                         />
                         <button onClick={this.handleSubmit} >Search</button>
                     </div>
+
         {
-            repos.length > 0 &&
                 <Fragment>
-                    <div className='list-container'>
-                        <div className='col'>
-                            {this.state.repos.map(repo => !repo.fork && <ListComponent key={repo.id} {...repo} />)}                        
-                        </div>
-                    </div>
+                    {loading ? <div><h2>...Loading</h2></div> : 
+                        apiMsg ? <div><h2>{apiMsg}</h2></div> :
+                        (<div className='list-container'>
+                            {starCount.map(repo => !repo.fork && <ListComponent key={repo.id} {...repo} />)}                        
+                        </div>)
+                    }
                 </Fragment>
         }
             </Fragment>
